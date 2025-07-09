@@ -27,10 +27,12 @@
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^7.1.2",
     "electron": "^37.2.0",
     "eslint": "^9.30.1",
     "jest": "^30.0.4",
     "sharp": "^0.33.5",
+    "style-loader": "^4.0.0",
     "ts-jest": "^29.4.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3"
@@ -77,6 +79,14 @@
                   "html": "./src/index.html",
                   "js": "./src/renderer.ts",
                   "name": "main_window",
+                  "preload": {
+                    "js": "./src/preload.ts"
+                  }
+                },
+                {
+                  "html": "./src/settings.html",
+                  "js": "./src/settings-renderer.ts",
+                  "name": "settings_window",
                   "preload": {
                     "js": "./src/preload.ts"
                   }

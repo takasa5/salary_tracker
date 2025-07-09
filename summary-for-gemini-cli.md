@@ -14,7 +14,9 @@
     - `src/index.ts`を更新し、`iconPath from './assets/icon.png';`をインポートし、`nativeImage.createFromPath`に`path.join(__dirname, 'icon.png')`を使用するようにしました。
     - デバッグ用の`console.log`ステートメントを`src/index.ts`に追加し、問題解決後に削除しました。
 - その過程で発生した`ReferenceError: path is not defined`と`ReferenceError: iconPath is not defined`を修正しました。
-- **起動時のUI表示の停止:** アプリケーション起動時にメインウィンドウが自動的に表示されないように、`src/index.ts` の `app.on('ready')` から `createWindow()` の呼び出しを削除しました。
+- **メインウィンドウの廃止とメニューバーへの給料表示:** 起動時にUIを表示しないだけでなく、メインウィンドウを完全に廃止し、稼いだ給料をメニューバーのトレイアイコンのタイトルとして直接表示するように変更しました。これに伴い、`mainWindow`に関連するコード（変数宣言、`createWindow`関数、および関連するイベントハンドラ）をすべて削除しました。
+- **UIのモダン化とmacOS標準への準拠:** `src/index.css` を作成し、UIをモダンでmacOS標準に近づけるためのスタイリングを適用しました。これには、フォント、色、シャドウ、ボーダー、パディング、マージン、入力フィールド、ボタンの調整が含まれます。
+- **設定ウィンドウのエラー修正:** `package.json` の `forge.config.plugins` 内の `entryPoints` に `settings_window` を追加することで、`SETTINGS_WINDOW_WEBPACK_ENTRY is not defined` エラーを解決しました。
 
 ## 次にやるべきこと (What to do next)
 1.  **テストの失敗の修正:** `test/index.test.ts` のテストが継続的に失敗しており、原因の特定と修正が必要です。

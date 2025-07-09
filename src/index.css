@@ -1,0 +1,86 @@
+/* Basic Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f2f2f7; /* Very light gray, typical macOS background */
+    color: #1c1c1e; /* Dark text, almost black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#root {
+    background-color: #ffffff;
+    padding: 15px; /* Slightly less padding for a more compact look */
+    border-radius: 8px; /* Standard macOS app window corners */
+    box-shadow: none; /* Remove box-shadow, rely on window shadow */
+    width: 100%;
+    max-width: 280px; /* Slightly narrower for a compact menu bar app */
+    text-align: center;
+    border: none; /* Remove border */
+}
+
+h1 {
+    color: #1c1c1e;
+    font-size: 18px; /* Smaller for a more subtle heading */
+    margin-bottom: 10px; /* Less margin */
+    font-weight: 600;
+}
+
+#earned-salary {
+    font-size: 26px; /* Smaller for a more compact display */
+    font-weight: bold;
+    color: #007aff; /* Standard macOS blue */
+    margin-bottom: 15px; /* Less margin */
+}
+
+h2 {
+    color: #1c1c1e;
+    font-size: 15px; /* Smaller for settings heading */
+    margin-top: 20px; /* Less margin */
+    margin-bottom: 10px; /* Less margin */
+    border-top: 1px solid #e5e5ea; /* Consistent subtle separator */
+    padding-top: 15px; /* Less padding */
+    font-weight: 500;
+}
+
+form div {
+    margin-bottom: 10px; /* Less margin */
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px; /* Less space */
+    font-weight: 500;
+    color: #3a3a3c;
+}
+
+input[type="number"] {
+    width: calc(100% - 16px);
+    padding: 8px 8px; /* Smaller padding */
+    border: 1px solid #d1d1d6; /* Subtle border */
+    border-radius: 4px; /* Standard input border-radius */
+    font-size: 14px; /* Smaller font size */
+    box-sizing: border-box;
+    -webkit-appearance: none;
+}
+
+button[type="submit"] {
+    background-color: #007aff;
+    color: white;
+    padding: 8px 15px; /* Smaller padding */
+    border: none;
+    border-radius: 4px; /* Standard button border-radius */
+    font-size: 14px; /* Smaller font size */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+    margin-top: 10px; /* Add some top margin */
+}
+
+button[type="submit"]:hover {
+    background-color: #005bb5;
+}
