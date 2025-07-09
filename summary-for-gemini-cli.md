@@ -14,6 +14,7 @@
     - `src/index.ts`を更新し、`iconPath from './assets/icon.png';`をインポートし、`nativeImage.createFromPath`に`path.join(__dirname, 'icon.png')`を使用するようにしました。
     - デバッグ用の`console.log`ステートメントを`src/index.ts`に追加し、問題解決後に削除しました。
 - その過程で発生した`ReferenceError: path is not defined`と`ReferenceError: iconPath is not defined`を修正しました。
+- **起動時のUI表示の停止:** アプリケーション起動時にメインウィンドウが自動的に表示されないように、`src/index.ts` の `app.on('ready')` から `createWindow()` の呼び出しを削除しました。
 
 ## 次にやるべきこと (What to do next)
 1.  **テストの失敗の修正:** `test/index.test.ts` のテストが継続的に失敗しており、原因の特定と修正が必要です。

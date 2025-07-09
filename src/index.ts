@@ -109,7 +109,14 @@ const createTray = () => {
   console.log('Tray is destroyed:', tray.isDestroyed());
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show App', click: () => mainWindow.show() },
+    { label: 'Show App', click: () => {
+      if (!mainWindow) {
+        createWindow();
+      }
+      if (mainWindow) {
+        mainWindow.show();
+      }
+    }},
     { label: 'Settings', click: createSettingsWindow },
     { type: 'separator' },
     { label: 'Quit', click: () => app.quit() },
@@ -119,6 +126,9 @@ const createTray = () => {
   tray.setContextMenu(contextMenu);
 
   tray.on('click', () => {
+    if (!mainWindow) {
+      createWindow();
+    }
     if (mainWindow) {
       const { x, y } = tray.getBounds();
       const { width, height } = mainWindow.getBounds();
@@ -131,7 +141,6 @@ const createTray = () => {
 
 app.on('ready', () => {
   console.log('App is ready.');
-  createWindow();
   createTray();
   if (process.platform === 'darwin') {
     app.dock.hide();
