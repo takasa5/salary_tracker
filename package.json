@@ -4,7 +4,7 @@
   "description": "",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "node script/generate-image.js && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "lint": "eslint --ext .ts,.tsx .",
