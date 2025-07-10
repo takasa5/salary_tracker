@@ -51,4 +51,12 @@ settingsForm.addEventListener('submit', async (event) => {
   alert('Settings saved!');
 });
 
+monthlySalaryInput.addEventListener('focus', () => {
+  monthlySalaryInput.type = 'number';
+});
+
+monthlySalaryInput.addEventListener('blur', () => {
+  monthlySalaryInput.type = 'password';
+});
+
 loadSettings();
