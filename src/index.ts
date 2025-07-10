@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain } from 'electron';
+import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, powerMonitor } from 'electron';
 import path from 'path';
 import Store from 'electron-store';
 import iconPath from './assets/icon.png';
@@ -18,6 +18,9 @@ declare const SETTINGS_WINDOW_WEBPACK_ENTRY: string;
 
 let tray: Tray | null = null;
 let settingsWindow: BrowserWindow | null = null;
+
+let suspendTime: number | null = null;
+let totalSuspendedTime: number = 0;
 
 export interface StoreSchema {
   monthlySalary: number;
@@ -139,8 +142,9 @@ const createTray = () => {
     const monthlyHours = currentStore.get('monthlyHours') as number;
     const calculator = new SalaryCalculator(monthlySalary, monthlyHours);
     const appUptimeSeconds = process.uptime();
-    const appUptimeHours = appUptimeSeconds / 3600;
-    const earnedSalaryValue = calculator.calculateEarnedSalary(appUptimeHours);
+    const activeUptimeSeconds = appUptimeSeconds - totalSuspendedTime;
+    const activeUptimeHours = activeUptimeSeconds / 3600;
+    const earnedSalaryValue = calculator.calculateEarnedSalary(activeUptimeHours);
     tray.setTitle(`¥${earnedSalaryValue.toFixed(2)}`);
   }
 
@@ -163,6 +167,19 @@ app.on('ready', () => {
   if (process.platform === 'darwin') {
     app.dock?.hide();
   }
+
+  powerMonitor.on('suspend', () => {
+    console.log('System is suspending');
+    suspendTime = Date.now();
+  });
+
+  powerMonitor.on('resume', () => {
+    console.log('System is resuming');
+    if (suspendTime !== null) {
+      totalSuspendedTime += (Date.now() - suspendTime) / 1000; // Convert ms to seconds
+      suspendTime = null;
+    }
+  });
 });
 
 
