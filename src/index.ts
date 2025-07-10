@@ -97,7 +97,7 @@ const createTray = () => {
     const appUptimeSeconds = process.uptime();
     const appUptimeHours = appUptimeSeconds / 3600;
     const earnedSalaryValue = calculator.calculateEarnedSalary(appUptimeHours);
-    tray.setTitle(`¥${earnedSalaryValue.toFixed(0)}`);
+    tray.setTitle(`¥${earnedSalaryValue.toFixed(2)}`);
   }
 
   updateTrayTitle(); // Initial update
