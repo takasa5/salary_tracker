@@ -14,8 +14,16 @@
                 <input type="number" id="monthly-salary" required>
             </div>
             <div>
-                <label for="monthly-hours">Monthly Hours:</label>
-                <input type="number" id="monthly-hours" required>
+                <label>Monthly Hours Calculation:</label>
+                <div>
+                    <input type="radio" id="monthly-hours-auto" name="monthly-hours-calculation" value="auto">
+                    <label for="monthly-hours-auto">Auto (based on working days)</label>
+                </div>
+                <div>
+                    <input type="radio" id="monthly-hours-manual" name="monthly-hours-calculation" value="manual">
+                    <label for="monthly-hours-manual">Manual:</label>
+                    <input type="number" id="manual-monthly-hours" required>
+                </div>
             </div>
             <button type="submit">Save</button>
         </form>

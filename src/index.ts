@@ -3,6 +3,7 @@ import path from 'path';
 import Store from 'electron-store';
 import iconPath from './assets/icon.png';
 import { SalaryCalculator } from './lib/SalaryCalculator';
+import { calculateMonthlyWorkingHours } from './lib/utils';
 
 export interface AppStore<T> {
   get<K extends keyof T>(key: K): T[K] | undefined;
@@ -21,12 +22,16 @@ let settingsWindow: BrowserWindow | null = null;
 export interface StoreSchema {
   monthlySalary: number;
   monthlyHours: number;
+  monthlyHoursCalculationMethod: 'auto' | 'manual';
+  manualMonthlyHours: number;
 }
 
 const store = new Store<StoreSchema>({
   defaults: {
     monthlySalary: 320000,
     monthlyHours: 160,
+    monthlyHoursCalculationMethod: 'auto',
+    manualMonthlyHours: 160,
   },
 });
 
@@ -34,12 +39,28 @@ export const getSettingsHandler = (store: AppStore<StoreSchema>) => () => {
   return {
     monthlySalary: store.get('monthlySalary'),
     monthlyHours: store.get('monthlyHours'),
+    monthlyHoursCalculationMethod: store.get('monthlyHoursCalculationMethod'),
+    manualMonthlyHours: store.get('manualMonthlyHours'),
   };
 };
 
-export const setSettingsHandler = (store: AppStore<StoreSchema>) => (event: Electron.IpcMainInvokeEvent, settings: { monthlySalary: number; monthlyHours: number }) => {
+export const setSettingsHandler = (store: AppStore<StoreSchema>) => (event: Electron.IpcMainInvokeEvent, settings: {
+  monthlySalary: number;
+  monthlyHoursCalculationMethod: 'auto' | 'manual';
+  manualMonthlyHours: number;
+}) => {
   store.set('monthlySalary', settings.monthlySalary);
-  store.set('monthlyHours', settings.monthlyHours);
+  store.set('monthlyHoursCalculationMethod', settings.monthlyHoursCalculationMethod);
+  store.set('manualMonthlyHours', settings.manualMonthlyHours);
+
+  // Update monthlyHours based on the selected method
+  if (settings.monthlyHoursCalculationMethod === 'auto') {
+    const now = new Date();
+    const autoCalculatedHours = calculateMonthlyWorkingHours(now.getFullYear(), now.getMonth() + 1);
+    store.set('monthlyHours', autoCalculatedHours);
+  } else {
+    store.set('monthlyHours', settings.manualMonthlyHours);
+  }
 };
 
 export const getEarnedSalaryHandler = (store: AppStore<StoreSchema>) => () => {
@@ -54,6 +75,11 @@ export const getEarnedSalaryHandler = (store: AppStore<StoreSchema>) => () => {
 ipcMain.handle('get-settings', getSettingsHandler(store as any));
 ipcMain.handle('set-settings', setSettingsHandler(store as any));
 ipcMain.handle('get-earned-salary', getEarnedSalaryHandler(store as any));
+
+ipcMain.handle('get-auto-calculated-monthly-hours', () => {
+  const now = new Date();
+  return calculateMonthlyWorkingHours(now.getFullYear(), now.getMonth() + 1);
+});
 
 
 

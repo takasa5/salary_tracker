@@ -19,6 +19,7 @@
 - **設定ウィンドウのエラー修正:** `package.json` の `forge.config.plugins` 内の `entryPoints` に `settings_window` を追加することで、`SETTINGS_WINDOW_WEBPACK_ENTRY is not defined` エラーを解決しました。
 - **稼いだ給料の小数点以下表示:** メニューバーに表示される「稼いだ給料」が小数点以下も表示されるように、`src/index.ts` の `updateTrayTitle` 関数で `toFixed(0)` を `toFixed(2)` に変更しました。
 - **テストの失敗の修正:** `test/index.test.ts` のテストが継続的に失敗していた問題を修正しました。具体的には、`src/index.ts`のIPCハンドラをリファクタリングしてテスト可能にし、`test/index.test.ts`で`electron-store`と`electron`モジュールを適切にモック化しました。
+- **月当たりの時間の導出方法の変更:** 月当たりの勤務時間を、その月の平日の数から自動計算するように変更しました。ユーザーが手動で入力するオプションも残しました。これに伴い、`src/lib/utils.ts`に`calculateMonthlyWorkingHours`関数を追加し、`src/index.ts`の`StoreSchema`とIPCハンドラ、`src/settings.html`と`src/settings-renderer.ts`、そしてテストファイルを更新しました。
 
 ## 次にやるべきこと (What to do next)
 - 現在のところ、次の明確なタスクはありません。ユーザーからの追加の指示を待ちます。
@@ -35,3 +36,4 @@
 -   **設定ウィンドウのエラー修正:** `SETTINGS_WINDOW_WEBPACK_ENTRY is not defined` エラーを解決しました。
 -   **稼いだ給料の小数点以下表示:** メニューバーに表示される「稼いだ給料」が小数点以下も表示されるようになりました。
 -   **テストの失敗の修正:** `test/index.test.ts` のテストが継続的に失敗していた問題を修正しました。
+-   **月当たりの時間の導出方法の変更:** 月当たりの勤務時間を、その月の平日の数から自動計算するように変更しました。ユーザーが手動で入力するオプションも残しました。
