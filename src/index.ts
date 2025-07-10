@@ -1,9 +1,15 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain } from 'electron';
 import path from 'path';
-import path from 'path';
 import Store from 'electron-store';
 import iconPath from './assets/icon.png';
 import { SalaryCalculator } from './lib/SalaryCalculator';
+
+export interface AppStore<T> {
+  get<K extends keyof T>(key: K): T[K] | undefined;
+  get<K extends keyof T>(key: K, defaultValue: T[K]): T[K];
+  set<K extends keyof T>(key: K, value: T[K]): void;
+}
+
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -12,33 +18,42 @@ declare const SETTINGS_WINDOW_WEBPACK_ENTRY: string;
 let tray: Tray | null = null;
 let settingsWindow: BrowserWindow | null = null;
 
-const store = new Store({
+export interface StoreSchema {
+  monthlySalary: number;
+  monthlyHours: number;
+}
+
+const store = new Store<StoreSchema>({
   defaults: {
     monthlySalary: 320000,
     monthlyHours: 160,
   },
 });
 
-ipcMain.handle('get-settings', () => {
+export const getSettingsHandler = (store: AppStore<StoreSchema>) => () => {
   return {
     monthlySalary: store.get('monthlySalary'),
     monthlyHours: store.get('monthlyHours'),
   };
-});
+};
 
-ipcMain.handle('set-settings', (event, settings) => {
+export const setSettingsHandler = (store: AppStore<StoreSchema>) => (event: Electron.IpcMainInvokeEvent, settings: { monthlySalary: number; monthlyHours: number }) => {
   store.set('monthlySalary', settings.monthlySalary);
   store.set('monthlyHours', settings.monthlyHours);
-});
+};
 
-ipcMain.handle('get-earned-salary', () => {
+export const getEarnedSalaryHandler = (store: AppStore<StoreSchema>) => () => {
   const monthlySalary = store.get('monthlySalary') as number;
   const monthlyHours = store.get('monthlyHours') as number;
   const calculator = new SalaryCalculator(monthlySalary, monthlyHours);
   const appUptimeSeconds = process.uptime();
   const appUptimeHours = appUptimeSeconds / 3600;
   return calculator.calculateEarnedSalary(appUptimeHours);
-});
+};
+
+ipcMain.handle('get-settings', getSettingsHandler(store as any));
+ipcMain.handle('set-settings', setSettingsHandler(store as any));
+ipcMain.handle('get-earned-salary', getEarnedSalaryHandler(store as any));
 
 
 
@@ -90,9 +105,12 @@ const createTray = () => {
   tray.setToolTip('Salary Tracker');
   tray.setContextMenu(contextMenu);
 
-  async function updateTrayTitle() {
-    const monthlySalary = store.get('monthlySalary') as number;
-    const monthlyHours = store.get('monthlyHours') as number;
+  async function updateTrayTitle(currentStore: AppStore<StoreSchema>) {
+    if (!tray) {
+      return;
+    }
+    const monthlySalary = currentStore.get('monthlySalary') as number;
+    const monthlyHours = currentStore.get('monthlyHours') as number;
     const calculator = new SalaryCalculator(monthlySalary, monthlyHours);
     const appUptimeSeconds = process.uptime();
     const appUptimeHours = appUptimeSeconds / 3600;
@@ -100,8 +118,8 @@ const createTray = () => {
     tray.setTitle(`¥${earnedSalaryValue.toFixed(2)}`);
   }
 
-  updateTrayTitle(); // Initial update
-  setInterval(updateTrayTitle, 1000); // Update every second
+  updateTrayTitle(store as any); // Initial update
+  setInterval(() => updateTrayTitle(store as any), 1000); // Update every second
 
   console.log('Tray created.');
 };
@@ -110,7 +128,7 @@ app.on('ready', () => {
   console.log('App is ready.');
   createTray();
   if (process.platform === 'darwin') {
-    app.dock.hide();
+    app.dock?.hide();
   }
 });
 
