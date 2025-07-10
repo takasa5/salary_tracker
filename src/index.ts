@@ -21,6 +21,7 @@ let settingsWindow: BrowserWindow | null = null;
 
 let suspendTime: number | null = null;
 let totalSuspendedTime: number = 0;
+let resetTime: number = 0; // Time in seconds when the counter was last reset
 
 export interface StoreSchema {
   monthlySalary: number;
@@ -127,6 +128,11 @@ const createTray = () => {
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Settings', click: createSettingsWindow },
+    { label: 'Reset', click: () => {
+      resetTime = process.uptime();
+      totalSuspendedTime = 0;
+      updateTrayTitle(store as any); // Update immediately after reset
+    } },
     { type: 'separator' },
     { label: 'Quit', click: () => app.quit() },
   ]);
@@ -142,8 +148,8 @@ const createTray = () => {
     const monthlyHours = currentStore.get('monthlyHours') as number;
     const calculator = new SalaryCalculator(monthlySalary, monthlyHours);
     const appUptimeSeconds = process.uptime();
-    const activeUptimeSeconds = appUptimeSeconds - totalSuspendedTime;
-    const activeUptimeHours = activeUptimeSeconds / 3600;
+    const activeUptimeSinceReset = (appUptimeSeconds - resetTime) - totalSuspendedTime;
+    const activeUptimeHours = activeUptimeSinceReset / 3600;
     const earnedSalaryValue = calculator.calculateEarnedSalary(activeUptimeHours);
     tray.setTitle(`¥${earnedSalaryValue.toFixed(2)}`);
   }
