@@ -25,3 +25,4 @@
 -   **設定ウィンドウのUIデザイン適用修正:** `mini-css-extract-plugin`を導入し、Webpack設定（`webpack.renderer.config.js`）を修正することで、`src/settings.css`が正しくバンドルされ、設定ウィンドウにデザインが適用されるようにしました。また、`src/settings.html`からCSSの`<link>`タグを削除し、`src/settings-renderer.ts`からCSSをインポートするように変更しました。
 -   **設定ウィンドウの余白調整:** 設定ウィンドウの余白を減らし、よりコンパクトな表示になるように`src/settings.css`のスタイリングを調整しました。
 -   **メニューバーアイコンの表示問題の修正:** `package.json`の`config.forge.packagerConfig.extraResource`のパスを`src/assets/icon.png`に修正し、ビルドされたアプリケーションでメニューバーアイコンが正しく表示されるようにしました。
+-   **macOS向け複数アーキテクチャビルドの有効化:** `package.json`の`make`スクリプトを修正し、`npm run make`でmacOSの`arm64`と`x64`の両方のアーキテクチャ向けにビルドが生成されるようにしました。
