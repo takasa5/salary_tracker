@@ -118,13 +118,10 @@ function createOrangeIcon(size = 20) {
 }
 
 const createTray = () => {
-  console.log('Creating tray...');
   const iconPath = path.join(__dirname, 'icon.png');
   const icon = nativeImage.createFromPath(iconPath);
   icon.setTemplateImage(true);
   tray = new Tray(icon);
-  console.log('Tray object created:', tray);
-  console.log('Tray is destroyed:', tray.isDestroyed());
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Settings', click: createSettingsWindow },
@@ -156,8 +153,6 @@ const createTray = () => {
 
   updateTrayTitle(store as any); // Initial update
   setInterval(() => updateTrayTitle(store as any), 1000); // Update every second
-
-  console.log('Tray created.');
 };
 
 app.on('window-all-closed', () => {
@@ -168,19 +163,17 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', () => {
-  console.log('App is ready.');
   createTray();
   if (process.platform === 'darwin') {
     app.dock?.hide();
   }
 
   powerMonitor.on('suspend', () => {
-    console.log('System is suspending');
     suspendTime = Date.now();
   });
 
   powerMonitor.on('resume', () => {
-    console.log('System is resuming');
+    
     if (suspendTime !== null) {
       totalSuspendedTime += (Date.now() - suspendTime) / 1000; // Convert ms to seconds
       suspendTime = null;
