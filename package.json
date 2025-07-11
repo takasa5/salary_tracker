@@ -48,7 +48,7 @@
     "forge": {
       "packagerConfig": {
         "extraResource": [
-          "src/icon.png"
+          "src/assets/icon.png"
         ]
       },
       "makers": [
