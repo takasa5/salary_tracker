@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Settings</title>
+    <link rel="stylesheet" href="settings.css">
 </head>
 <body>
-    <div id="root">
-        <h1>Settings</h1>
+    <div class="container">
+        <h1 class="title">Settings</h1>
 
-        <form id="settings-form">
-            <div>
-                <label for="monthly-salary">Monthly Salary:</label>
-                <input type="password" id="monthly-salary" required>
+        <form id="settings-form" class="settings-form">
+            <div class="form-group">
+                <label for="monthly-salary" class="form-label">Monthly Salary:</label>
+                <input type="password" id="monthly-salary" class="form-input" required>
             </div>
-            <div>
-                <label>Monthly Hours Calculation:</label>
-                <div>
-                    <input type="radio" id="monthly-hours-auto" name="monthly-hours-calculation" value="auto">
-                    <label for="monthly-hours-auto">Auto (based on working days)</label>
-                </div>
-                <div>
-                    <input type="radio" id="monthly-hours-manual" name="monthly-hours-calculation" value="manual">
-                    <label for="monthly-hours-manual">Manual:</label>
-                    <input type="number" id="manual-monthly-hours" required>
+            <div class="form-group">
+                <label class="form-label">Monthly Hours Calculation:</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="monthly-hours-auto" name="monthly-hours-calculation" value="auto" class="radio-input">
+                        <label for="monthly-hours-auto" class="radio-label">Auto (based on working days)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="monthly-hours-manual" name="monthly-hours-calculation" value="manual" class="radio-input">
+                        <label for="monthly-hours-manual" class="radio-label">Manual:</label>
+                        <input type="number" id="manual-monthly-hours" class="form-input" required>
+                    </div>
                 </div>
             </div>
-            <button type="submit">Save</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
 </body>

@@ -52,11 +52,16 @@ settingsForm.addEventListener('submit', async (event) => {
 });
 
 monthlySalaryInput.addEventListener('focus', () => {
-  monthlySalaryInput.type = 'number';
+  monthlySalaryInput.type = 'text';
 });
 
 monthlySalaryInput.addEventListener('blur', () => {
   monthlySalaryInput.type = 'password';
 });
 
-loadSettings();
+async function loadSettings() {
+  const settings = await window.api.getSettings();
+  monthlySalaryInput.value = settings.monthlySalary.toString();
+  monthlySalaryInput.type = 'password'; // Set to password initially
+
+  if (settings.monthlyHoursCalculationMethod === 'auto') {
