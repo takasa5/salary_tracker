@@ -23,6 +23,16 @@ Salary Tracker は、macOS のメニューバーに常駐し、PC の稼働時�
 
 ## インストール
 
+### GitHub Releases からダウンロードしてインストールする
+
+1.  [最新のリリース](https://github.com/your-username/salary_tracker/releases/latest) ページにアクセスします。
+2.  `Assets` セクションから、お使いの macOS のアーキテクチャ（Intel Mac の場合は `mac.zip` または `mac-x64.zip`、Apple Silicon の場合は `mac-arm64.zip`）に対応する `.zip` ファイルをダウンロードします。
+3.  ダウンロードした `.zip` ファイルを解凍します。
+4.  解凍された `Salary Tracker.app` を `Applications` フォルダにドラッグ＆ドロップします。
+5.  `Applications` フォルダから `Salary Tracker.app` を起動します。
+
+### ソースコードからビルドして実行する
+
 1.  リポジトリをクローンします。
     ```bash
     git clone https://github.com/your-username/salary_tracker.git
