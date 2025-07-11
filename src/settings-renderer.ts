@@ -1,4 +1,5 @@
 import { ipcRenderer } from 'electron';
+import './settings.css';
 
 declare global {
   interface Window {
